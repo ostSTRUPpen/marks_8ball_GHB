@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Znamka</title>
+</head>
+
+<body>
+    <label for="questions">Kolik bylo otázek?</label>
+    <input id="q" name="questions" type="number" value="0" required />
+    <br />
+    <label for="mistakes">Kolik máš chyb?</label>
+    <input id="m" name="mistakes" type="number" value="0" required />
+    <br />
+    <button id="btn1">Co dostanu za známku?</button>
+    <button id="btn2">Celé známkování?</button>
+    <hr />
+    <input id="voc" type="checkbox">
+    <label for="voc">Vypisovat postupně?</label>
+    <hr />
+    <p id="vo"></p>
+    <p>
+    <section id="o"></section>
+    </p>
+    <hr/>
+    <p>Pokud vám známky nevychází, ujistěte se, že jste zadali správný počet otázek.</p>
+
+    <script>
+        function getMark(questions, mistakes, vocal) {
+            console.log(vocal);
+            let mark = 999;
+            const needed = questions / 3;
+            if (mistakes >= needed) {
+                mark = 5;
+            } else {
+                const something = needed / 4;
+                mark = Math.round(mistakes / something);
+                if (vocal === 'on') {
+                    document.getElementById("vo").innerHTML += `Počet špatných odpovědí nutných k dostání pětky: ${needed} <br/>`;
+                    document.getElementById("vo").innerHTML += `'Počet špatných odpovědí nutných k dostání pětky' děleno 4: ${something} <br/>`;
+                    document.getElementById("vo").innerHTML += `'Počet chyb' děleno 'počtem špatných odpovědí nutných k dostání pětky děleno 4': ${mistakes / something}`;
+                }
+            }
+            if (mark == 0) {
+                mark = 1;
+            }
+            return mark;
+        }
+        document.getElementById("btn1").onclick = function () {
+            const a = document.getElementById("q").value;
+            const b = document.getElementById("m").value;
+            if (a >= 1000) {
+                document.getElementById("o").innerHTML = "Tolik otázek v testu určitě nemáš!";
+            } else {
+                document.getElementById("o").innerHTML = `Tvoje známka je: ${getMark(a, b, document.getElementById("voc").value)}`;
+            }
+        }
+        document.getElementById("btn2").onclick = function () {
+            const a = document.getElementById("q").value;
+            const b = document.getElementById("m").value;
+            if (a >= 1000) {
+                document.getElementById("o").innerHTML = "Tolik otázek v testu určitě nemáš!";
+            } else {
+                document.getElementById("o").innerHTML = "";
+                for (i = 0; i < a / 3; i++) {
+                    const c = getMark(a, i, false)
+                    if (c < 5) {
+                        document.getElementById("o").innerHTML += `Počet chyb: ${i}  = Známka: ${c} <br/>`;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
